@@ -1,0 +1,202 @@
+body,
+html {
+	margin:0;
+	padding:0;
+	min-height: 100%;
+}
+body {
+	height: 100%;
+	display: flex;
+	flex-direction:row;
+	justify-content: center;
+	background-color: #4e4e4e;
+}
+
+.app {
+	align-self: center;
+	max-width:90%;
+	width: 560px;
+	height:640px;
+	padding: 1px;
+	box-sizing: border-box;
+	border:2px solid lightgray;
+	background-color: #fff;
+}
+.app-inner {
+	display: flex;
+	flex-wrap: wrap;
+	position:relative;
+	height: calc(100% - 2px);
+	border: 1px solid lightgray;
+}
+.app-title {
+	text-align: center;
+	text-transform: uppercase;
+	color: #a1a1a1;
+	font: bold 2em/1em "Monospace";
+	flex: 1 100%;
+	align-self: center;
+}
+.app-panel {
+	position:relative;
+	flex-grow: 1;
+	box-sizing: border-box;
+	padding: 0 36px;
+	height: 540px;
+}
+.app-field {
+	position:relative;
+	margin: 0 0 0 36px;;
+	width:270px;
+	height:540px;
+	background-color: lightgray;
+	box-shadow: inset 0 0 12px rgba(12,12,12,.12);
+}
+.app-field-info, 
+.app-field-link {
+	position: absolute;
+	top: 50%;
+	margin-top: -1em;
+	width: 100%;
+	z-index: 1;
+	text-align: center;
+	text-shadow:  0 0 6px rgba(12,12,12,.12);
+}
+.app-field-link {
+	cursor: pointer;
+}
+.app-field-link:hover {
+	color: #fff;
+}
+
+.app-field-preview {
+	height: 200px;
+	margin-bottom: 36px;
+}
+
+.app-field-preview .app-figure {margin-top: 36px}
+.app-field-preview .app-figure--width-2 {width: calc(2*32px);}
+.app-field-preview .app-figure--width-3 {width: calc(3*32px);}
+.app-field-preview .app-figure--width-4 {width: calc(4*32px);}
+.app-field-preview .app-figure-cell {
+	width: 32px;
+	height: 32px;
+}
+.app-text {
+	font-family: "Monospace";
+	font-weight: bold;
+	color: #a1a1a1;
+	text-transform: uppercase;
+}
+.app-text-label {
+	float: left;
+}
+.app-text-value {
+	text-align: right;
+	color: #212121;
+}
+.app-history {
+	position: absolute;
+	bottom:0;
+	left: 36px;
+	right: 36px;
+}
+
+
+.app-figure:not([hidden]) {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.app-figure-cell {
+	box-sizing: border-box;
+}
+.app-figure-cell--abs {
+	position: absolute;
+}
+.app-figure-cell--fill {
+	background-color: #f2f2f2;
+	border: 1px solid lightgray;
+} 
+.app-figure-i {}
+
+
+
+
+.app-handles {
+	margin-top: 36px;
+}
+.app-handle {
+	margin-top: 16px;
+	max-width: 170px;
+	text-align: center;
+}
+.app-handle-button {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	color: #a1a1a1;
+	border:1px solid #a1a1a1;
+	background: radial-gradient(circle, rgb(168, 168, 168) 0%, rgb(200, 200, 200) 56%, rgba(172,172,172,1) 65%, rgb(149, 149, 149) 100%);
+	border-radius:4px;
+	cursor: pointer;
+}
+.app-handle-button:hover {
+	color: #fff;
+	background: radial-gradient(circle, rgb(200, 200, 200) 0%, rgb(200, 200, 200) 56%, rgba(172,172,172,1) 65%, rgb(149, 149, 149) 100%);
+} 
+
+.app-handle-button-wrapper {
+	margin-bottom:5px;
+}
+.app-handle-button-left,
+.app-handle-button-bottom,
+.app-handle-button-right {
+	position: relative;
+	overflow: hidden;
+}
+.app-handle-button-rotate:before {
+	position: absolute;
+	content:"\27f3";
+	margin: 2px 0 0 -14px;
+	font-size: 36px;
+	font-weight: bold;
+}
+.arrow-left:before,
+.arrow-right:before,
+.arrow-down:before {
+	position: absolute;
+	content:"";
+	width: 0; 
+	height: 0;
+}
+.arrow-down:before {
+	top: 21px;
+	left:14px;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid #a1a1a1;
+}
+.arrow-down:hover:before{
+	border-top-color: #fff
+}
+.arrow-left:before {	
+	top: 13px;
+	left:16px;
+	border-top: 12px solid transparent;
+	border-bottom: 12px solid transparent;
+	border-right: 12px solid #a1a1a1;
+}
+.arrow-left:hover:before{
+	border-right-color: #fff;
+}
+.arrow-right:before {	
+	top: 13px;
+	left:22px;
+	border-top: 12px solid transparent;
+	border-bottom: 12px solid transparent;
+	border-left: 12px solid #a1a1a1;
+}
+.arrow-right:hover:before{
+	border-left-color: #fff
+}
