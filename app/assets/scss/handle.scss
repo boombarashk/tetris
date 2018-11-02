@@ -1,0 +1,88 @@
+.app-handles {
+  margin-top: $indent;
+}
+
+
+.app-handle {
+  margin-top: 16px;
+  max-width: 170px;
+  text-align: center;
+
+  &-button {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    color: #a1a1a1;
+    border:1px solid #a1a1a1;
+    background: radial-gradient(circle, rgb(168, 168, 168) 0%, rgb(200, 200, 200) 56%, rgba(172,172,172,1) 65%, rgb(149, 149, 149) 100%);
+    border-radius:4px;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      background: radial-gradient(circle, rgb(200, 200, 200) 0%, rgb(200, 200, 200) 56%, rgba(172,172,172,1) 65%, rgb(149, 149, 149) 100%);
+    }
+
+    &-wrapper {
+      margin-bottom:5px;
+    }
+
+    &-rotate:before {
+      position: absolute;
+      content:"\27f3";
+      margin: 2px 0 0 -14px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+
+    &-left,
+    &-bottom,
+    &-right {
+      position: relative;
+      overflow: hidden;
+
+      &:before {
+        position: absolute;
+        content:"";
+        width: 0;
+        height: 0;
+      }
+    }
+
+    &-left:before {
+      top: 13px;
+      left:16px;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-right: 12px solid $handle-gray;
+
+      &:hover {
+        border-right-color: #fff;
+      }
+    }
+
+    &-bottom:before {
+      top: 21px;
+      left:14px;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid $handle-gray;
+
+      &:hover {
+        border-top-color: #fff;
+      }
+    }
+
+    &-right:before {
+      top: 13px;
+      left:22px;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 12px solid $handle-gray;
+
+      &:hover {
+        border-left-color: #fff;
+      }
+    }
+  }
+}

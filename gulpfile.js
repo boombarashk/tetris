@@ -1,38 +1,31 @@
-const gulp = require('gulp');
+const { task, src, dest, parallel } = require('gulp');
 const cssnano = require('gulp-cssnano');
 const clean = require('gulp-clean');
 const rename = require('gulp-rename');
-const uglify = require('gulp-uglify');
-const babel = require('gulp-babel');
+const sass = require('gulp-sass');
 
-gulp.task('minify', () => {
-    return gulp.src('app/assets/tetris.js')
-        .pipe(babel({
-            presets: ['@babel/env'],
-          //  plugins: ["transform-remove-console"]
+const webpack = require('webpack-stream');
+
+task('webpack', ()=>{
+    return src('app/assets/tetris.js')
+        .pipe(webpack({
+            config: require(`${__dirname}/webpack.config.js`)
         }))
-        //.pipe(uglify())
-        .pipe(rename("app.min.js"))
-        .pipe(gulp.dest('public'));
+        .pipe(dest('app/dist/'))
 });
 
-gulp.task('css', () => {
-    return gulp.src('app/assets/*.css')
+task('sass', ()=> {
+    return src('app/assets/styles.scss')
+        .pipe(sass())
         .pipe(cssnano())
         .pipe(rename("app.min.css"))
-        .pipe(gulp.dest('public'));
-});
-
-gulp.task('clean', () => {
-     return gulp.src('public/*', { read: false })
-         .pipe(clean())
+        .pipe(dest('app/dist'))
 });
 
 
 
-gulp.task('default', gulp.parallel('css', 'minify', () => {
-/*    gulp.src('app/!*.html')
-        .pipe(gulp.dest('public'))*/
-    return gulp.src('public/*.js', { read: false })
+exports.default = parallel('webpack', 'sass', () => {
+    //gulp.src('app/*.html').pipe(gulp.dest('public'))
+    return src('app/dist/*', { read: false })
         .pipe(clean())
-}));
+});

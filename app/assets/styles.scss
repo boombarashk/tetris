@@ -1,0 +1,36 @@
+$bg-white: #fff;
+$bg-light-gray: lightgray;
+$bg-figure-gray: #f2f2f2;
+$bg-gray: #4e4e4e;
+$handle-gray: #a1a1a1;
+$text-gray: #a1a1a1;
+$text-dark-gray: #212121;
+$shadow-gray: rgba(12,12,12,.12);
+
+$multi: 32px;
+$indent: 36px;
+$width-desktop: 560px;
+$height-desktop: 640px;
+
+@mixin text-shadow(){
+  text-shadow:  0 0 6px $shadow-gray;
+}
+
+@mixin box-shadow(){
+  box-shadow: inset 0 0 12px $shadow-gray;
+}
+
+%field-text {
+  position: absolute;
+  top: 50%;
+  margin-top: -1em;
+  width: 100%;
+  z-index: 1;
+  text-align: center;
+  @include text-shadow();
+}
+
+@import 'scss/base';
+@import 'scss/text';
+@import 'scss/figure';
+@import 'scss/handle';

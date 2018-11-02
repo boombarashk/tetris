@@ -1,0 +1,41 @@
+.app-figure {
+  &:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &-cell {
+    box-sizing: border-box;
+
+    &--fill {
+      background-color: $bg-figure-gray;
+      border: 1px solid $bg-light-gray;
+    }
+
+    &--abs {
+      position: absolute;
+    }
+  }
+
+  &-i {}
+}
+
+.app-field-preview {
+  height: 200px;
+  margin-bottom: $indent;
+
+  .app-figure {
+    margin-top: $indent;
+
+    @for $i from 2 to 4 {
+      &--width-#{$i} {
+        width: calc(2 * #{$multi}px);
+      }
+    }
+
+    &-cell {
+      width: $multi;
+      height: $multi;
+    }
+  }
+}

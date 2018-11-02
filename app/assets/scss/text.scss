@@ -1,0 +1,31 @@
+.app-field {
+  &-link {
+    @extend %field-text;
+
+    cursor: pointer;
+
+    &:hover {
+      color: $bg-white;
+    }
+  }
+
+  &-info {
+    @extend %field-text;
+  }
+}
+
+.app-text {
+  font-family: "Monospace";
+  font-weight: bold;
+  color: $text-gray;
+  text-transform: uppercase;
+
+  &-label {
+    float: left;
+  }
+
+  &-value {
+    text-align: right;
+    color: $text-dark-gray;
+  }
+}

@@ -1,0 +1,66 @@
+body,
+html {
+  margin:0;
+  padding:0;
+  min-height: 100%;
+}
+body {
+  height: 100%;
+  display: flex;
+  flex-direction:row;
+  justify-content: center;
+  background-color: $bg-gray;
+}
+
+.app {
+  align-self: center;
+  max-width: 90%;
+  width: $width-desktop;
+  height: $height-desktop;
+  padding: 1px;
+  box-sizing: border-box;
+  border: 2px solid $bg-light-gray;
+  background-color: $bg-white;
+
+  &-inner {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    height: calc(100% - 2px);
+    border: 1px solid $bg-light-gray;
+  }
+
+  &-title {
+    text-align: center;
+    text-transform: uppercase;
+    color: $text-gray;
+    font: bold 2em/1em "Monospace";
+    flex: 1 100%;
+    align-self: center;
+  }
+
+  &-panel {
+    position: relative;
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding: 0 $indent;
+    height: 540px;
+  }
+
+  &-field {
+    position:relative;
+    margin: 0 0 0 $indent;
+    width:270px;
+    height:540px;
+    background-color: $bg-light-gray;
+    @include box-shadow();
+  }
+
+
+  &-history {
+    position: absolute;
+    bottom:0;
+    left: $indent;
+    right: $indent;
+  }
+}
