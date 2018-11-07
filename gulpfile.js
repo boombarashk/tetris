@@ -7,7 +7,7 @@ const sass = require('gulp-sass');
 const webpack = require('webpack-stream');
 
 task('webpack', ()=>{
-    return src('app/assets/tetris.js')
+    return src('app/assets/app.js')
         .pipe(webpack({
             config: require(`${__dirname}/webpack.config.js`)
         }))

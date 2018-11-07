@@ -1,4 +1,4 @@
-let SHAPES = new Map([
+const SHAPES = new Map([
   ["i", { height: 1, width: 4, matrix: [[1, 1, 1, 1]] }],
   ["j", { height: 2, width: 3, matrix: [[1, 1, 1], [0, 0, 1]] }],
   ["l", { height: 2, width: 3, matrix: [[1, 1, 1], [1, 0, 0]] }],
@@ -8,7 +8,7 @@ let SHAPES = new Map([
   ["o", { height: 2, width: 2, matrix: [[1, 1], [1, 1]] }],
 ]);
 
-class Field {
+export class Field {
 	constructor(element) {
 		this.wrapper = element
 
@@ -541,6 +541,3 @@ class FieldFigure extends BaseFigure {
 		this.matrix = Array.apply(null, Array(size.y)).map(() => new Array(size.x).fill(0))
 	}
 }
-
-
-let field = new Field(document.querySelector(".app"));

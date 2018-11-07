@@ -1,9 +1,12 @@
 module.exports = {
     mode: "production",
-    entry: ["@babel/polyfill", './app/assets/tetris.js'],
+    entry: {
+        "app.min": ["@babel/polyfill", './app/assets/app.js'],
+        "test.spec": './app/test/index.js',
+    },
     devtool: "source-map",
     output: {
-        filename: "app.min.js"
+        filename: "[name].js"
     },
     module: {
         rules: [
@@ -15,5 +18,5 @@ module.exports = {
                 }
             },
         ]
-    }
+    },
 }
