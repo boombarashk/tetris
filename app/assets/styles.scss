@@ -9,8 +9,13 @@ $shadow-gray: rgba(12,12,12,.12);
 
 $multi: 32px;
 $indent: 36px;
+$width-field: 270px;
 $width-desktop: 560px;
 $height-desktop: 640px;
+$height-inner: 540px;
+$height-mobile-head: 40px;
+
+$media-mobile: 624px;// $width-desktop / 90%
 
 @mixin text-shadow(){
   text-shadow:  0 0 6px $shadow-gray;
