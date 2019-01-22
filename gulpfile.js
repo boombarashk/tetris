@@ -1,25 +1,28 @@
 const gulp = require('gulp');
 const cssnano = require('gulp-cssnano');
 const clean = require('gulp-clean');
-const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
-const babel = require('gulp-babel');
+const browserify = require('browserify');
+const babelify = require("babelify");
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const hbsfy = require('hbsfy');
 
 gulp.task('minify', () => {
-    return gulp.src('app/assets/tetris.js')
-        .pipe(babel({
-            presets: ['@babel/env'],
-          //  plugins: ["transform-remove-console"]
-        }))
-        //.pipe(uglify())
-        .pipe(rename("app.min.js"))
+    return browserify('app/assets/tetris.js').transform(hbsfy.configure({"extensions":"hbs"})).transform(babelify.configure({
+        presets: ['@babel/env'],
+        //  plugins: ["transform-remove-console"]
+    })).bundle()
+        .pipe(source('app.min.js'))
+        .pipe(buffer())
+        .pipe(uglify())
         .pipe(gulp.dest('public'));
 });
 
 gulp.task('css', () => {
     return gulp.src('app/assets/*.css')
         .pipe(cssnano())
-        .pipe(rename("app.min.css"))
+        //.pipe(rename("app.min.css"))
         .pipe(gulp.dest('public'));
 });
 
