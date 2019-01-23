@@ -1,5 +1,5 @@
 import {SHAPES} from "./constants";
-
+import templateHTML from './templates/field.hbs'
 
 class Field {
 	constructor(element) {
@@ -42,34 +42,10 @@ class Field {
 		
 		this.figure = this.previewFigure = new Figure()
 
-		element.insertAdjacentHTML('afterbegin', `<div class='app-inner'>
-			<div class="app-title">Tetris</div>
-			<div class="app-field">
-				<div class="app-field-link app-text">play</div>
-			</div>
-			<div class="app-panel">
-				<div class="app-field-preview">
-				<div class="app-text">future figure</div>
-				${this.previewFigure.elementHTML}
-			</div>
-			<div class="app-text app-text-label">score</div>
-			<div class="app-text app-text-value" id="score">${this.score.count}</div>
-			<div class="app-handles">
-				<div class="app-text">handles</div>
-				<div class="app-handle">
-					<div class="app-handle-button-wrapper">
-						<div class="app-handle-button app-handle-button-rotate"></div>
-					</div>
-					<div class="app-handle-button app-handle-button-left arrow-left"></div>
-					<div class="app-handle-button app-handle-button-bottom arrow-down"></div>
-					<div class="app-handle-button app-handle-button-right arrow-right"></div>
-				</div>
-			</div>
-			<div class="app-history">
-				<div class="app-text app-text-label">best score</div>
-				<div class="app-text app-text-value" id="bestscore">${this.score.countBest}</div>
-			</div>
-		</div>`);
+		element.insertAdjacentHTML('afterbegin', templateHTML({
+            previewFigure: this.previewFigure,
+            score: this.score,
+		}));
 
 		this.field = element.querySelector(".app-field")
 		let width = this.field.clientWidth;
