@@ -284,29 +284,28 @@ console.log("3.", this.timer.id, this.figure.params)
 	rotateFigure() {
 		if (this.figure.params.key === "o") return;
 
-		this.figure.element.hidden = true
+		this.figure.element.hidden = true;
+        let angle = this.figure.params.rotate + 90
+        this.figure.params.rotate = angle < 360 ? angle : 0
+        let matrix = this.figure.matrix.get(this.figure.params.rotate)
+        this.figure.elementHTML = this.figure.renderCells(matrix, this.cell)
 
-		let angle = this.figure.params.rotate + 90
-		this.figure.params.rotate = angle < 360 ? angle : 0
-		let matrix = this.figure.matrix.get(this.figure.params.rotate) 
-		let oldHtml = this.figure.element.innerHTML
 
-		this.figure.params.height = matrix.length
-		this.figure.params.width = matrix[0].length
-		//let matrix = this.figure.setParamsFigure(this.figure.params.rotate)
+        let observer = new MutationObserver((mutationsList, observer) => {
+            mutationsList.forEach(mutation => {
+                this.figure.params.height = matrix.length
+                this.figure.params.width = matrix[0].length
+                this.redrawFigure()
+                this.inpending = false;
 
-		this.figure.elementHTML = this.figure.renderCells(matrix, this.cell)
+                this.figure.element.hidden = false;
+                console.log(this.figure.elementHTML , mutation.type, this.figure.params.width, this.figure.params.height );
+                observer.disconnect()
+            })
+        })
+        observer.observe(this.figure.element, {childList: true});
+
 		this.figure.element.innerHTML = this.figure.elementHTML
-		
-
-		new Promise(resolve => {
-			console.log(oldHtml, this.figure.element.innerHTML)
-			if (oldHtml !== this.figure.element.innerHTML ) {
-				this.inpending = false;this.figure.element.hidden = false
-				resolve();
-			}
-		});
-
 	}
 
 	shiftFigure(dx){
@@ -346,20 +345,20 @@ console.log("3.", this.timer.id, this.figure.params)
 	}
 
 	compareMatrix(newParams){
+//console.log("---compareMatrix", newParams, this.figure)
+//console.log(newParams, `y: ${y} ${y > this.size.y - height}`, `x: ${x} ${x > this.size.x - width},`)
 
-		let angle = newParams.angle ? newParams.angle : this.figure.params.rotate
+        let angle = newParams.angle ? newParams.angle : this.figure.params.rotate
 		let matrix = this.figure.matrix.get(angle/* === undefined ? 0 : angle*/) 
 		let height = matrix.length
 		let width = matrix[0].length
 		let {x, y} = this.figure.params
-//console.log(newParams, `y: ${y} ${y > this.size.y - height}`, `x: ${x} ${x > this.size.x - width},`)
+
 		if (y > this.size.y - height || x > this.size.x - width ) {
-			console.log("out field")
+			console.log("out field");
 			return false
 		}
 
-		/*let x = this.figure.params.x
-		let y = this.figure.params.y*/
 		let dx = x + (newParams.x || 0)
 		let dy = y + (newParams.y || 0)
 //console.log("--compareMatrix--", matrix, width, "x",height, dx, dy)
