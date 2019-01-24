@@ -87,17 +87,22 @@ class Field {
 					.then(()=>{
 
 						switch(changeEvent) {
-							case "LEFT": 
-								this.shiftFigure(-1);
+							case "LEFT":
+							    if (this.compareMatrix({x: -1})) {
+                                    this.shiftFigure(-1);
+                                }
 								break;
 
-							case "RIGHT": 
-								this.shiftFigure(1);
+							case "RIGHT":
+                                if (this.compareMatrix({x: 1})) {
+                                    this.shiftFigure(1);
+                                }
 								break;
 
 							case "ROTATE":
-								if (this.compareMatrix({angle: this.figure.params.rotate + 90})) {
-									this.inpending = true;
+                                const angle = this.figure.params.rotate < 270 ? this.figure.params.rotate + 90 : 0
+								if (this.compareMatrix({angle: angle})) {
+
 
 									this.rotateFigure();
 								} //else console.log("inpossible rotate")
@@ -205,6 +210,7 @@ class Field {
 		figureElement.style.width = this.cell * this.figure.params.width
 		figureElement.style.top = `${this.figure.params.y * this.cell}px`
 		figureElement.style.left = `${this.figure.params.x * this.cell}px`
+        this.inpending = false;
 	}
 	
 	redrawField(){
@@ -250,7 +256,7 @@ class Field {
 		}).then(() => {
 			let line = this.checkMatrix();
 			while (line >= 0) {
-				let voidline = this.fieldFigure.matrix.splice(line,1).map(bit => !bit);
+				let voidline = this.fieldFigure.matrix.splice(line,1)[0].map(bit => +!bit);
 				this.fieldFigure.matrix.unshift(voidline);
 				this.clearLine(line);
 
@@ -258,7 +264,7 @@ class Field {
 
 				this.countScore(500);
 			}
-console.log("3.", this.timer.id, this.figure.params)
+//console.log("3.", this.timer.id, this.figure.params)
 //this.inpending = false//????
 			/* then */this.start();
 		});
@@ -272,7 +278,7 @@ console.log("3.", this.timer.id, this.figure.params)
 
 					this.figure.params.y += 1
 					this.redrawFigure();
-					this.inpending = false;
+					//this.inpending = false;
 				} else {
 					if (this.timer.id) clearInterval(this.timer.id)
 					this.redrawField()
@@ -283,7 +289,7 @@ console.log("3.", this.timer.id, this.figure.params)
 
 	rotateFigure() {
 		if (this.figure.params.key === "o") return;
-
+        this.inpending = true;
 		this.figure.element.hidden = true;
         let angle = this.figure.params.rotate + 90
         this.figure.params.rotate = angle < 360 ? angle : 0
@@ -296,10 +302,9 @@ console.log("3.", this.timer.id, this.figure.params)
                 this.figure.params.height = matrix.length
                 this.figure.params.width = matrix[0].length
                 this.redrawFigure()
-                this.inpending = false;
 
                 this.figure.element.hidden = false;
-                console.log(this.figure.elementHTML , mutation.type, this.figure.params.width, this.figure.params.height );
+
                 observer.disconnect()
             })
         })
@@ -322,7 +327,7 @@ console.log("3.", this.timer.id, this.figure.params)
 	
 	renderMatrixField_n_addCells(){
 		let {width, height, x, y, rotate} = this.figure.params
-		let matrix = this.figure.matrix.get(rotate) 
+		let matrix = this.figure.matrix.get(rotate)
 
 		for (let y1 = 0; y1 < matrix.length; y1++ ) {
 			for (let x1 = 0; x1 < matrix[0].length; x1++) {
