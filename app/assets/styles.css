@@ -158,8 +158,8 @@ body {
 .app-handle-button-rotate:before {
 	position: absolute;
 	content:"\27f3";
-	margin: 2px 0 0 -14px;
-	font-size: 36px;
+	margin: 6px 0 0 -14px;
+	font-size: 32px;
 	font-weight: bold;
 }
 .arrow-left:before,

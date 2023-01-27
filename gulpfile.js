@@ -22,7 +22,6 @@ gulp.task('minify', () => {
 gulp.task('css', () => {
     return gulp.src('app/assets/*.css')
         .pipe(cssnano())
-        //.pipe(rename("app.min.css"))
         .pipe(gulp.dest('public'));
 });
 
@@ -34,8 +33,8 @@ gulp.task('clean', () => {
 
 
 gulp.task('default', gulp.parallel('css', 'minify', () => {
-/*    gulp.src('app/!*.html')
-        .pipe(gulp.dest('public'))*/
+    gulp.src('app/*.html')
+        .pipe(gulp.dest('public'))
     return gulp.src('public/*.js', { read: false })
         .pipe(clean())
 }));

@@ -76,61 +76,47 @@ class Field {
 						clearInterval(this.timer.id)
 					}
 
-					new Promise( resolve => {
-						let deferredraw = setInterval(()=>{
-							if (!this.inpending) {
-								clearInterval(deferredraw);
-								resolve();
+					switch(changeEvent) {
+						case "LEFT":
+							if (this.compareMatrix({x: -1})) {
+								this.shiftFigure(-1);
 							}
-						}, 100);
-					})
-					.then(()=>{
+							break;
 
-						switch(changeEvent) {
-							case "LEFT":
-							    if (this.compareMatrix({x: -1})) {
-                                    this.shiftFigure(-1);
-                                }
-								break;
+						case "RIGHT":
+							if (this.compareMatrix({x: 1})) {
+								this.shiftFigure(1);
+							}
+							break;
 
-							case "RIGHT":
-                                if (this.compareMatrix({x: 1})) {
-                                    this.shiftFigure(1);
-                                }
-								break;
+						case "ROTATE":
+							const angle = this.figure.params.rotate < 270 ? this.figure.params.rotate + 90 : 0
+							if (this.compareMatrix({angle: angle})) {
+								this.rotateFigure();
+							} //else inpossible rotate
+							break;
 
-							case "ROTATE":
-                                const angle = this.figure.params.rotate < 270 ? this.figure.params.rotate + 90 : 0
-								if (this.compareMatrix({angle: angle})) {
+						default:
+							this.inpending = true;
+							let {y, height} = this.figure.params;
+							let y1 = this.size.y - height;
 
+							while (y <= y1){
+								let compareResult = this.compareMatrix({y: 1});
 
-									this.rotateFigure();
-								} //else console.log("inpossible rotate")
-								break;
-
-							default:
-								let {y, height} = this.figure.params;
-								let y1 = this.size.y - height;
-
-								while (y <= y1){
-									let compareResult = this.compareMatrix({y: y});
-
-									if (!compareResult) break;
-
-									y += 1
+								if (compareResult){
+									this.figure.params.y += 1
+								} else {
+									break
 								}
-								console.log(this.figure, y)
+								y += 1
+							}
+							this.redrawField()
+					}
 
-								this.figure.params.y += y - 1
-
-								this.redrawFigure();
-								this.redrawField();
-						}
-
-						if (changeEvent !== "BOTTOM") {
-							this.fallFigure()
-						}
-					})				
+					if (changeEvent !== "BOTTOM") {
+						this.fallFigure()
+					}
 				}
 			}
 		});
@@ -182,11 +168,11 @@ class Field {
 		})
 		this.redrawFigure()
 
-		if ( this.compareMatrix({x: this.figure.params.x, y:0}) || this.score.count === 0) {//todo check need this.score.count === 0
+		if (this.fieldFigure.matrix[0].reduce((i,j) => i+j, 0) === 0 ||
+			this.compareMatrix({x: this.figure.params.x, y:0})) {
 			this.fallFigure()
 		} else {
-			this.stop();
-
+			this.stop()
 		}
 
 		this.previewFigure = new Figure()
@@ -219,55 +205,30 @@ class Field {
 		this.countScore()
 
 		// new Promise
-/*		this.timer.deferredraw = setInterval(() => {
+		this.timer.deferredraw = setInterval(() => {
 				
 			if (!this.figure.element || !this.field.contains(this.figure.element)){
 				
 				//if (this.timer.id) clearInterval(this.timer.id)
 				if (this.timer.deferredraw) {
 					clearInterval(this.timer.deferredraw);
-}
-					let line = this.checkMatrix();
+				}
 
-					while (line >= 0) {
-						let voidline = this.fieldFigure.matrix.splice(line,1).map(bit => !bit);
-						this.fieldFigure.matrix.unshift(voidline)
-						this.clearLine(line)
-						line = this.checkMatrix()
-						this.countScore(500)
-					}
+				let line = this.checkMatrix();
+				while (line >= 0) {
+					let voidline = this.fieldFigure.matrix.splice(line,1)[0].map(bit => +!bit);
+					this.fieldFigure.matrix.unshift(voidline);
+					this.clearLine(line);
+
+					line = this.checkMatrix();
+
+					this.countScore(500);
+				}
 
 					this.start();
 				}
 			
-		}, 200)*/
-
-		//todo CHANGE
-		new Promise((resolve, reject) => {
-			let deferredraw = setInterval(() => {
-						console.log("1. redrawField")
-				if (!this.figure.element || !this.field.contains(this.figure.element)){// todo check need if
-					if (!this.inpending) {
-						clearInterval(deferredraw);
-						resolve();
-					}
-				}
-			}, 200);
-		}).then(() => {
-			let line = this.checkMatrix();
-			while (line >= 0) {
-				let voidline = this.fieldFigure.matrix.splice(line,1)[0].map(bit => +!bit);
-				this.fieldFigure.matrix.unshift(voidline);
-				this.clearLine(line);
-
-				line = this.checkMatrix();
-
-				this.countScore(500);
-			}
-//console.log("3.", this.timer.id, this.figure.params)
-//this.inpending = false//????
-			/* then */this.start();
-		});
+		}, 200)
 	}
 	
 	fallFigure(){
@@ -278,7 +239,6 @@ class Field {
 
 					this.figure.params.y += 1
 					this.redrawFigure();
-					//this.inpending = false;
 				} else {
 					if (this.timer.id) clearInterval(this.timer.id)
 					this.redrawField()
@@ -341,8 +301,8 @@ class Field {
 					let cell = this.field.children[this.field.children.length - 1]
 					cell.style.left = `${cellX * this.cell}px`
 					cell.style.top = `${cellY * this.cell}px`
-					cell.setAttribute("data-coord-x", cellX)					
-					cell.setAttribute("data-coord-y", cellY)					
+					cell.setAttribute("data-coord-x", cellX)
+					cell.setAttribute("data-coord-y", cellY)
 				}
 			}
 		}
@@ -350,26 +310,21 @@ class Field {
 	}
 
 	compareMatrix(newParams){
-//console.log("---compareMatrix", newParams, this.figure)
-//console.log(newParams, `y: ${y} ${y > this.size.y - height}`, `x: ${x} ${x > this.size.x - width},`)
-
-        let angle = newParams.angle ? newParams.angle : this.figure.params.rotate
-		let matrix = this.figure.matrix.get(angle/* === undefined ? 0 : angle*/) 
+        let angle = newParams.angle ? newParams.angle : +this.figure.params.rotate
+		let matrix = this.figure.matrix.get(angle)
 		let height = matrix.length
 		let width = matrix[0].length
 		let {x, y} = this.figure.params
 
-		if (y > this.size.y - height || x > this.size.x - width ) {
+/*		if (y > this.size.y - height || x > this.size.x - width ) {
 			console.log("out field");
 			return false
-		}
+		}*/
 
-		let dx = x + (newParams.x || 0)
+		//let dx = x + (newParams.x || 0)
 		let dy = y + (newParams.y || 0)
-//console.log("--compareMatrix--", matrix, width, "x",height, dx, dy)
 		do {
-			try {
-			for (let y1 = height-1; y1 >= 0; y1--) {
+			for (let y1 = 0; y1 < height; y1++) {
 				for (let x1 = 0; x1 < width; x1++ ) {
 
 					let cellX = x1 + x;					
@@ -380,10 +335,7 @@ class Field {
 					}
 				}
 			}
-			} catch(e) { 
-				console.error(e);
-				return false
-			}
+
 			y += 1;
 		}while(y <= dy)
 
@@ -489,7 +441,7 @@ class Figure extends BaseFigure{
 	}
 
 	renderFigure(){
-		let matrix = this.setParamsFigure()//todo
+		let matrix = this.setParamsFigure()
 		this.elementHTML = `<div class="${this.BASE_CLASS} ${this.BASE_CLASS}-${this.params.key} ${this.BASE_CLASS}--width-${this.params.width}">
 			${this.renderCells(matrix)}
 		</div>`
